@@ -1,0 +1,50 @@
+extends ../common/layout
+
+block main-content
+    h1.text-center
+        | Create new playlist
+
+    form(method="post" action='/playlists')
+        label(for="title") Title
+        input(id="title" class="form-control" type="text" name="title" placeholder="Title")
+        br
+        label(for="description") Description
+        input(id="description" class="form-control" type="text" name="description" placeholder="Description")
+        br
+        label(for="videoURL_0") Youtube video URL #1
+        input(id="videoURL_0" class="form-control" type="text" name="videoURL_0" placeholder="Youtube video URL")
+
+        #addNewURLsDiv
+
+        br
+        #addNewYRLBtn.btn.btn-primary.btn-md Add another URL
+        br
+
+        br
+        label(for="category") Category
+            select(id="category" class="form-control" name="category")
+                each category in categories
+                    option(value="#{category}") #{category}
+
+        br
+        br
+        input(id='privateBtn' type="checkbox" name="private")
+        span Private
+        br
+        #privateUsersThatCanView
+            label(for="private_user_can_view_0") Username that is able to view #1
+            input(id="private_user_can_view_0" class="form-control" type="text" name="private_user_can_view_0" placeholder="Username")
+
+            #addNewPrivateViewUsersDiv
+
+            br
+            #addNewPrivateViewUser.btn.btn-primary.btn-md Add another username
+            br
+
+        br
+        input(type="submit" class="btn btn-lg" value="Create")
+
+block page-scripts
+    script.
+        ableToUnlimitedVideoURLs="#{ableToUnlimitedVideoURLs}";
+    script(src="/js/src/playlist-create.js")

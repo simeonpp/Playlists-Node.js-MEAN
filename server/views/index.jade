@@ -1,0 +1,25 @@
+extends ./common/layout
+
+block main-content
+    h1  Welcome to Youtube Playlist System
+
+    h2  Top 8 projects
+    table.table.table-responsive
+        tr
+            th  Title
+            th  Description
+            th  Category
+            th  Creator
+            th  Rating
+            th  Details
+
+        if playlists
+            each playlist in playlists
+                tr
+                    td #{playlist.title}
+                    td #{playlist.description}
+                    td #{playlist.category}
+                    td #{playlist.creator}
+                    td #{playlist.rating}
+                    td
+                        a(href='/playlists/#{playlist._id}') View details

@@ -1,0 +1,49 @@
+extends ../common/layout
+
+block main-content
+    h1.text-center
+        | Playlist
+
+    form(method="get" action='/playlists/list')
+        .row
+            .col-md-2
+                label(for="sortBy") Sort options
+                    select(id="sortBy" class="form-control" name="sortBy")
+                        option(value="date") Date
+                        option(value="rating") Rating
+            .col-md-4
+                label(for="searchByCategory") Search by category
+                    select(id="searchByCategory" class="form-control" name="searchByCategory")
+                        each category in categories
+                            option(value="#{category}") #{category}
+            .col-md-4
+                label(for="titleAndDesc") Search by title and description
+                input(id="titleAndDesc" class="form-control" type="titleAndDesc" name="titleAndDesc" placeholder="Title description")
+        .row
+            input(type="submit" class="btn btn-lg" value="Filter")
+
+    br
+    table.table.table-responsive
+        tr
+            th  Title
+            th  Description
+            th  Category
+            th  Creator
+            th  Rating
+            th  Details
+
+        if playlists
+            each playlist in playlists
+                tr
+                    td #{playlist.title}
+                    td #{playlist.description}
+                    td #{playlist.category}
+                    td #{playlist.creator}
+                    td #{playlist.rating}
+                    td
+                        a(href='/playlists/#{playlist._id}') View details
+
+
+
+
+

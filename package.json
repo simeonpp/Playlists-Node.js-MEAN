@@ -1,0 +1,25 @@
+{
+  "name": "MEAN-stack",
+  "version": "0.0.1",
+  "description": "MongoDB, Express, Angularjs Node.js ",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "SP",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "connect-busboy": "0.0.2",
+    "cookie-parser": "^1.4.1",
+    "crypto": "0.0.3",
+    "express": "^4.13.3",
+    "express-session": "^1.13.0",
+    "jade": "^1.11.0",
+    "mongoose": "^4.3.5",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "path": "^0.12.7"
+  }
+}

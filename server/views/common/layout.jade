@@ -1,0 +1,21 @@
+doctype
+html(lang='en')
+    head
+        title #{siteTitle}
+        link(rel="stylesheet" href="/js/lib/bootstrap-3.2.0/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/css/site.css")
+    body
+        header.nav
+        .container
+            include navigation
+
+        .container
+            if (errorMessage)
+                .alert.alert-danger #{errorMessage}
+
+            block main-content
+
+        footer
+            include footer
+
+        include scripts
