@@ -1,13 +1,12 @@
-var Playlist = require('mongoose').model('Playlist');
+var Playlist = require('mongoose').model('Playlist'),
+    NodeCache = require('node-cache'),
+    cachePlaylistsDataKey = 'topEightPlaylists';
+
+var dataCache = new NodeCache( { stdTTL: 100, checkperiod: 120 } ); // times are in seconds
 
 function isInArray(value, array) {
     return array.indexOf(value) > -1;
 }
-
-var cache = {
-    expires: undefined,
-    data: undefined
-};
 
 function getMinutesDiffFromToday(dateToCheck) {
     var today = new Date();
@@ -123,28 +122,23 @@ module.exports = {
             });
     },
     getTopEightPlaylists: function (callback) {
-        Playlist
-            .find({ "isPrivate": false })
-            .sort({"rating": -1})
-            .limit(8)
-            .exec(function (err, playlists) {
-                if (err) {
-                    callback(err);
-                }
+        var cachedTopEightPlaylistsData = dataCache.get(cachePlaylistsDataKey);
+        if (cachedTopEightPlaylistsData) {
+            callback(null, cachedTopEightPlaylistsData);
+        } else {
+            Playlist
+                .find({ "isPrivate": false })
+                .sort({"rating": -1})
+                .limit(8)
+                .exec(function (err, playlists) {
+                    if (err) {
+                        callback(err);
+                    }
 
-                if (cache.expires && getMinutesDiffFromToday(cache.expires) > 10 ) {
-                    callback(null, cache.data);
-                } else {
-                    var d1 = new Date (),
-                        d2 = new Date ( d1 );
-                    d2.setMinutes ( d1.getMinutes() + 10);
-
-                    cache.data = playlists;
-                    cache.expires = d2;
-
+                    dataCache.set(cachePlaylistsDataKey, playlists, 15); // 10 minutes
                     callback(null, playlists);
-                }
-            })
+                })
+        }
     },
     getList: function (username, sortBy, searchByCat, callback) {
         if (username) {
