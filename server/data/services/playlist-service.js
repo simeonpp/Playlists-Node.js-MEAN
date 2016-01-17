@@ -105,6 +105,7 @@ module.exports = {
     checkIfUserCanRateAndComment: function (playlistId, username, callback) {
         if (!username) {
             callback(null, false);
+            return;
         }
 
         Playlist
@@ -112,14 +113,17 @@ module.exports = {
             .exec(function (err, dbPlaylist) {
                 if (err) {
                     callback(err);
+                    return;
                 }
 
                 if (dbPlaylist.creator == username) {
                     callback(null, true);
+                    return;
                 }
 
                 if (isInArray(username, dbPlaylist.privateUserViewers)) {
                     callback(null, true);
+                    return;
                 }
 
                 callback(null, false);

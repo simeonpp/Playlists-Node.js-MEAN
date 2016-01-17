@@ -23,6 +23,9 @@ block main-content
         tr
             td Private
             td #{playlist.isPrivate}
+        tr
+            td Date created
+            td #{moment(playlist.createdOn).format('DD/MM/YYYY HH:mm')}
 
     h2
         | Youtube Videos

@@ -9,6 +9,7 @@ var express = require('express'),
 function loadCustomMiddleware(app, appParams) {
     var utils = require(path.join(appParams.rootPath, 'common', 'utils.js'));
 
+    // Session
     app.use(function (req, res, next) {
         if (req.session.error) {
             var msg = req.session.error;
@@ -22,6 +23,7 @@ function loadCustomMiddleware(app, appParams) {
         next();
     });
 
+    // User
     app.use(function (req, res, next) {
         if (req.user) {
             app.locals.currentUser = req.user;
@@ -30,7 +32,10 @@ function loadCustomMiddleware(app, appParams) {
         }
 
         next();
-    })
+    });
+
+    // Moment js
+    app.locals.moment = require('moment');
 }
 
 function loadCustomViewLocals(app, appParams) {
