@@ -3,7 +3,7 @@ var fs = require('fs'),
 
 module.exports = function(app, appParams, config) {
     /**
-     * Load configuration
+     * Load routes configuration
      * Looks up for files in ./server/controllers folder and loads each file with '-controller' in its name
      */
     var logger = require(appParams.loggerPath)(appParams),
@@ -18,16 +18,6 @@ module.exports = function(app, appParams, config) {
             logger.debug('Loading route ' + file);
             require(path.normalize(appParams.routesPath + '/' + file)).init(app, appParams);
         });
-
-    var playlistService = require(appParams.servicesPath + '/playlist-service.js');
-
-    app.get('/', function (req, res) {
-        playlistService.getTopEightPlaylists(function (err, playlists) {
-            res.render('index', {
-                playlists: playlists
-            })
-        });
-    });
 
     app.get('*', function(req, res) {
         res.redirect('/');
