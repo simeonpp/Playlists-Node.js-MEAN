@@ -64,7 +64,9 @@ module.exports = function (appParams) {
                     }
                 } else if (property.indexOf('private_user_can_view_') >= 0) {
                     var username = newPlaylistData[property];
-                    newPlaylistData.privateUserViewers.push(username);
+                    if (username != '') {
+                        newPlaylistData.privateUserViewers.push(username);
+                    }
                 }
             }
 
@@ -97,14 +99,15 @@ module.exports = function (appParams) {
                 currentUsername = req.user.username;
             }
 
-            if (playlist.isPrivate && !currentUsername) {
-                res.redirect('/login');
-                return;
-            }
-
             playlistService.checkIfUserCanRateAndComment(req.params.id, currentUsername, function (err, boolResult) {
                 if (err) {
                     logger.error(err);
+                    return;
+                }
+
+                // Check if is authorized to view this playlist
+                if ((playlist.isPrivate && !currentUsername) || (playlist.isPrivate && !boolResult)) {
+                    res.redirect('/notAuthorized');
                     return;
                 }
 
