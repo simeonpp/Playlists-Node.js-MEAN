@@ -40,7 +40,7 @@ module.exports = function (appParams) {
             userService.create(newUserData, function(err, user) {
                 if (err) {
                     logger.log('Failed to register new user: ' + err);
-                    req.session.error = err.message;
+                    req.session.error = err.toString();
                     res.redirect('/register');
                     return;
                 }

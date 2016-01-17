@@ -73,7 +73,6 @@ module.exports.init = function (appParams) {
 
     userSchema.path('username').validate(function (value) {
         var regEx = /^[A-Za-z0-9._]{6,20}$/;
-
         return regEx.test(value);
     });
 

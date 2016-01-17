@@ -135,7 +135,7 @@ module.exports = {
                         callback(err);
                     }
 
-                    dataCache.set(cachePlaylistsDataKey, playlists, 15); // 10 minutes
+                    dataCache.set(cachePlaylistsDataKey, playlists, 600); // 10 minutes
                     callback(null, playlists);
                 })
         }

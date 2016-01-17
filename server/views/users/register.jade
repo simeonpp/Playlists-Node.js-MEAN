@@ -3,30 +3,39 @@ extends ../common/layout
 block main-content
     form(method="post")
         label(for="email") E-mail
+            span.italics.red  required
         input(id="email" class="form-control" type="email" name="email" placeholder="E-mail")
         br
         label(for="username") Username
+            span.italics.red  required
         input(id="username" class="form-control" type="text" name="username" placeholder="Username")
         br
         label(for="password") Password
+            span.italics.red  required
         input(id="password" class="form-control" type="password" name="password" placeholder="Password")
         br
         label(for="confirm-password") Confirm Password
+            span.italics.red  required
         input(id="confirm-password" class="form-control" type="password" name="confirmPassword" placeholder="Confirm password")
         br
         label(for="first-name") First Name
+            span.italics.red  required
         input(id="first-name" class="form-control" type="text" name="firstName" placeholder="First Name")
         br
         label(for="last-name") Last Name
+            span.italics.red  required
         input(id="last-name" class="form-control" type="text" name="lastName" placeholder="Last Name")
         br
         label(for="facebookAcc") Facebook Account
+            span.italics.lightGrey  optional
         input(id="facebookAcc" class="form-control" type="text" name="facebookAcc" placeholder="Facebook account")
         br
         label(for="youtubeAcc") Youtube Account
+            span.italics.lightGrey  optional
         input(id="youtubeAcc" class="form-control" type="text" name="youtubeAcc" placeholder="Youtube account")
         br
         label(for="avatar") Avatar
+            span.italics.lightGrey  optional
         input(id="avatar" class="form-control" type="text" name="avatar" placeholder="Avatar")
         br
         input(type="submit" class="btn btn-lg" value="Register")

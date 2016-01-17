@@ -1,4 +1,4 @@
-require('./common/pollyfils');
+// require('./common/pollyfils'); // the node version support new ES6 features
 
 var express = require('express'),
     env = process.env.NODE_ENV || 'development',    // used in herouku
