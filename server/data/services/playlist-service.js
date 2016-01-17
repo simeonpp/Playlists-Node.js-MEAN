@@ -102,7 +102,11 @@ module.exports = {
                 });
             })
     },
-    checkIfUserIsAllowedToPrivatePlaylist: function (playlistId, username, callback) {
+    checkIfUserCanRateAndComment: function (playlistId, username, callback) {
+        if (!username) {
+            callback(null, false);
+        }
+
         Playlist
             .findById(playlistId)
             .exec(function (err, dbPlaylist) {

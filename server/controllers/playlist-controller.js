@@ -75,7 +75,6 @@ module.exports = function (appParams) {
                     logger.log('Failed to create new playlist: ' + err);
                     req.session.error = err.message;
                     res.redirect('/playlists/create');
-                    return;
                 }
 
                 res.redirect('/playlists/' + playlist._id);
@@ -85,26 +84,35 @@ module.exports = function (appParams) {
 
     function getDetails(req, res) {
         playlistService.getById(req.params.id, function (err, playlist) {
+            if (err) {
+                logger.error(err);
+                return;
+            }
+
             var isAuthor = false,
-                currnetUsername = '';
+                currentUsername = undefined;
 
             if (req.user) {
                 isAuthor = req.user.username == playlist.creator;
-                currnetUsername = req.user.username;
+                currentUsername = req.user.username;
             }
 
-            playlistService.checkIfUserIsAllowedToPrivatePlaylist(req.params.id, currnetUsername, function (err, boolResult) {
-                if (playlist.isPrivate && boolResult) {
-                    res.render(CONTROLLER_NAME + '/details', {
-                        playlist: playlist,
-                        isAuthor: isAuthor,
-                        isAllowedToPostComment: boolResult
-                    });
+            if (playlist.isPrivate && !currentUsername) {
+                res.redirect('/login');
+                return;
+            }
+
+            playlistService.checkIfUserCanRateAndComment(req.params.id, currentUsername, function (err, boolResult) {
+                if (err) {
+                    logger.error(err);
                     return;
-                } else {
-                    res.redirect('/playlists');
                 }
 
+                res.render(CONTROLLER_NAME + '/details', {
+                    playlist: playlist,
+                    isAuthor: isAuthor,
+                    isAllowedToRateAndComment: boolResult
+                });
             });
         });
     }
