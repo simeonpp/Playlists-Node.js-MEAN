@@ -155,46 +155,33 @@ module.exports = {
         }
     },
     getList: function (username, sortBy, searchByCat, callback) {
-        if (username) {
-            var findQuery;
+        // Default sorting
+        sortBy = {"createdOn": -1};
 
-            if (searchByCat) {
-                findQuery = { $or: [ { "isPrivate": false }, { $and: [ {"category": searchByCat}, { "privateUserViewers": { $regex: '.*\Q' + username + '\E.*', $options: 'i' } } ] } ] };
-            } else {
-                findQuery = { $or: [ { "isPrivate": false }, { $and: [ { "privateUserViewers": { $regex: '.*\Q' + username + '\E.*', $options: 'i' } } ] } ] };
-            }
-
-            Playlist
-                .find(findQuery)
-                .sort(sortBy)
-                .exec(function (err, playlists) {
-                    if (err) {
-                        callback(err, playlists)
-                    }
-
-                    callback(null, playlists);
-                })
-        } else {
-            var findQuery;
-
-            if (searchByCat) {
-                findQuery = { "isPrivate": false, "category": searchByCat };
-            } else {
-                findQuery = { "isPrivate": false };
-            }
-
-            Playlist
-                .find(findQuery)
-                .sort(sortBy)
-                .exec(function (err, playlists) {
-                    if (err) {
-                        callback(err, playlists)
-                        return;
-                    }
-
-                    callback(null, playlists);
-                })
+        if (sortBy == 'date') {
+            sortBy = {"createdOn": -1};
         }
+
+        if (sortBy == 'rating') {
+            sortBy = {"rating": -1};
+        }
+
+        Playlist
+            .find()
+            .or([
+                { $and: [{isPrivate: true}, {creator: username}] },
+                { isPrivate: false },
+                { privateUserViewers: username }
+            ])
+            .sort(sortBy)
+            .exec(function (err, dbPlaylists) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+
+                callback(null, dbPlaylists);
+            });
     },
     delete: function (playlistId, callback) {
         Playlist

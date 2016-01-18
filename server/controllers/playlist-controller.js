@@ -171,18 +171,12 @@ module.exports = function (appParams) {
             searchByCat = false;
 
         if (req.query && req.query.sortBy) {
-            if (req.query.sortBy == 'date') {
-                sortBy = {"createdOn": -1};
-            }
-
-            if (req.query.sortBy == 'rating') {
-                sortBy = {"rating": -1};
-            }
+            sortBy = req.query.sortBy;
         }
 
-        if (req.query && req.query.searchByCategory) {
-            searchByCat = req.query.searchByCategory;
-        }
+        //if (req.query && req.query.searchByCategory) {
+        //    searchByCat = req.query.searchByCategory;
+        //}
 
         if (req.user) {
             username = req.user.username;
