@@ -72,6 +72,11 @@ block main-content
             br
             input(type="submit" class="btn btn-lg" value="Rate and Comment")
 
+    br
+    if isAuthor
+        form(method="post" action='/playlists/#{playlist._id}/delete')
+            input(type="submit" class="btn btn-lg btn-danger" value="Delete this playlist")
+
 
 
 

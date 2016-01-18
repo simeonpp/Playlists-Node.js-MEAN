@@ -16,6 +16,7 @@ var init = function (app, appParams) {
     playlistRouter.get('/:id/videos/:videoURLNumber/delete', authService.isAuthenticated, playlistController.deleteVideoURL);
 
     playlistRouter.post('/:id/commentAndRate', authService.isAuthenticated, playlistController.postCommentAndRate);
+    playlistRouter.post('/:id/delete', authService.isAuthenticated, playlistController.delete);
 
     app.use(ROUTER_NAME, playlistRouter);
 };

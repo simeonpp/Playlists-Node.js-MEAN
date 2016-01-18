@@ -186,12 +186,23 @@ module.exports = function (appParams) {
         });
     }
 
+    function deletePlaylist(req, res) {
+        playlistService.delete(req.params.id, function (err) {
+            if (err) {
+                logger.error(err);
+            }
+
+            res.redirect('/playlists');
+        })
+    }
+
     return {
         getCreate: getCreate,
         postCreate: postCreate,
         getDetails: getDetails,
         deleteVideoURL: deleteVideoURL,
         postCommentAndRate: postCommentAndRate,
-        getList: getList
+        getList: getList,
+        delete: deletePlaylist
     }
 };

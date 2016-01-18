@@ -188,5 +188,18 @@ module.exports = {
                     callback(null, playlists);
                 })
         }
+    },
+    delete: function (playlistId, callback) {
+        Playlist
+            .findById(playlistId)
+            .remove()
+            .exec(function (err) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+
+                callback(null);
+            })
     }
 };
