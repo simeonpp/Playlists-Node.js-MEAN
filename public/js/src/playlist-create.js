@@ -15,7 +15,7 @@ $( document ).ready(function() {
             $input,
             $br = $('<br>');
 
-        if (videoUrlCounter > 10 && ableToUnlimitedVideoURLs) {
+        if (videoUrlCounter > 10 && !ableToUnlimitedVideoURLs) {
             alert('You are not able to add more than 10 videos per playlist. You should first give 10 ratings to other playlists.');
             return;
         }

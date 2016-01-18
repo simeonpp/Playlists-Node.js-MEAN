@@ -7,6 +7,7 @@ var init = function (app, appParams) {
         errorRouter = new express.Router();
 
     errorRouter.get('/notAuthorized', errorController.getNotAuthorized);
+    errorRouter.get('/error', errorController.page404);
 
     app.use(ROUTER_NAME, errorRouter);
 };

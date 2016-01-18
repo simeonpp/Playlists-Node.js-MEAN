@@ -7,6 +7,9 @@ block main-content
                 img(src="#{currentUser.avatar}" width='100%')
                 label(for="avatar") Avatar
                 input(id="avatar" value='#{currentUser.avatar}' class="form-control" type="text" name="avatar" placeholder="Avatar")
+                br
+                h3  Rating
+                div #{userRating}
             .col-md-8
                 label(for="email") E-mail
                     input(id="email" value='#{currentUser.email}' class="form-control" type="email" name="email" placeholder="E-mail")

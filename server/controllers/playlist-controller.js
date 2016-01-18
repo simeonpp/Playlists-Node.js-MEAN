@@ -11,6 +11,7 @@ module.exports = function (appParams) {
         var categories = require('../common/constants.js').playlistCategories;
 
         userService.isAbleToAddUnlimitedVideoURLsToPlaylist(req.user, function (err, ableToUnlimitedVideoURLs) {
+            console.log(ableToUnlimitedVideoURLs);
             res.render(CONTROLLER_NAME + '/create', {
                 categories: categories,
                 ableToUnlimitedVideoURLs: ableToUnlimitedVideoURLs
@@ -88,6 +89,7 @@ module.exports = function (appParams) {
         playlistService.getById(req.params.id, function (err, playlist) {
             if (err) {
                 logger.error(err);
+                res.redirect('/error');
                 return;
             }
 
@@ -102,6 +104,7 @@ module.exports = function (appParams) {
             playlistService.checkIfUserCanRateAndComment(req.params.id, currentUsername, function (err, boolResult) {
                 if (err) {
                     logger.error(err);
+                    res.redirect('/error');
                     return;
                 }
 
@@ -127,6 +130,7 @@ module.exports = function (appParams) {
         playlistService.deleteByPlaylistIdAndVideoNumber(playlistId, videoURLNumber, function (err, playlist) {
             if (err) {
                 logger.error(err);
+                res.redirect('/error');
                 return;
             }
 
@@ -142,10 +146,21 @@ module.exports = function (appParams) {
         playlistService.postRateAndService(playlistId, rate, comment, req.user.username, function (err, playlist) {
             if (err) {
                 logger.error(err);
+                res.redirect('/error');
                 return;
             }
 
-            res.redirect('/playlists/' + playlistId);
+            // Update user give rates
+            userService.incrementGivenRates(req.user, function (err, updatedDbUser) {
+                if (err) {
+                    logger.error(err);
+                    res.redirect('/error');
+                    return;
+                }
+
+                res.redirect('/playlists/' + playlistId);
+            });
+
         })
     }
 
@@ -176,6 +191,7 @@ module.exports = function (appParams) {
         playlistService.getList(username, sortBy, searchByCat, function (err, playlists) {
             if (err) {
                 logger.error(err);
+                res.redirect('/error');
                 return;
             }
 

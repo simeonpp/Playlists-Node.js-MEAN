@@ -7,7 +7,12 @@ module.exports = function (appParams) {
         res.send('Not authorized');
     }
 
+    function error(req, res) {
+        res.send('Page 404.');
+    }
+
     return {
-        getNotAuthorized: getNotAuthorized
+        getNotAuthorized: getNotAuthorized,
+        page404: error
     }
 };

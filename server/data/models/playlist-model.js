@@ -12,7 +12,7 @@ function seedIntialPlaylist(appParams) {
 
             if (collection.length == 0) {
                 var i = 1,
-                    length = 10,
+                    length = 50,
                     currentPlaylist = {},
                     categories = require(appParams.constantsPath).playlistCategories,
                     randomCategory,

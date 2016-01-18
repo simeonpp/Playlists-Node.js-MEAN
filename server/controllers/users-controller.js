@@ -81,7 +81,17 @@ module.exports = function (appParams) {
     }
 
     function profile(req, res) {
-        res.render(CONTROLLER_NAME + '/profile')
+        userService.calculateUserRating(req.user, function (err, userRating) {
+            if (err) {
+                logger.error(err);
+                res.redirect('error');
+                return;
+            }
+
+            res.render(CONTROLLER_NAME + '/profile', {
+                userRating: userRating
+            })
+        });
     }
 
     function update(req, res) {

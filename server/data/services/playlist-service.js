@@ -25,6 +25,7 @@ module.exports = {
             .exec(function (err, dbPlaylist) {
                 if (err) {
                     callback(err);
+                    return;
                 }
 
                 callback(null, dbPlaylist);
@@ -36,6 +37,7 @@ module.exports = {
             .exec(function (err, dbPlaylist) {
                 if (err) {
                     callback(err);
+                    return;
                 }
 
                 var currentVideoUrls = dbPlaylist.videoURLs;
@@ -47,6 +49,7 @@ module.exports = {
                 dbPlaylist.save(function (err, newDbPlaylist) {
                     if (err) {
                         callback(err);
+                        return;
                     }
 
                     callback(null, newDbPlaylist);
@@ -61,6 +64,7 @@ module.exports = {
             .exec(function (err, dbPlaylist) {
                 if (err) {
                     callback(err);
+                    return;
                 }
 
                 // Rating
@@ -96,6 +100,7 @@ module.exports = {
                 dbPlaylist.save(function (err, newDbPlaylist) {
                     if (err) {
                         callback(err);
+                        return;
                     }
 
                     callback(null, newDbPlaylist);
@@ -141,6 +146,7 @@ module.exports = {
                 .exec(function (err, playlists) {
                     if (err) {
                         callback(err);
+                        return;
                     }
 
                     dataCache.set(cachePlaylistsDataKey, playlists, 600); // 10 minutes
@@ -183,6 +189,7 @@ module.exports = {
                 .exec(function (err, playlists) {
                     if (err) {
                         callback(err, playlists)
+                        return;
                     }
 
                     callback(null, playlists);
@@ -200,6 +207,18 @@ module.exports = {
                 }
 
                 callback(null);
+            })
+    },
+    getUsersPlaylists: function (user, callback) {
+        Playlist
+            .find({ "creator": user.username})
+            .exec(function (err, dbPlaylists) {
+                if (err) {
+                    callback(err);
+                    return;
+                }
+
+                callback(null, dbPlaylists)
             })
     }
 };
