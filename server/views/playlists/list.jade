@@ -4,16 +4,18 @@ block main-content
     h1.text-center
         | Playlist
 
+    - rating = (sortBy == 'rating') ? 'selected' : null;
     form(method="get" action='/playlists/list')
         .row
             .col-md-2
                 label(for="sortBy") Sort options
                     select(id="sortBy" class="form-control" name="sortBy")
                         option(value="date") Date
-                        option(value="rating") Rating
+                        option(value="rating" selected=rating) Rating
             .col-md-4
                 label(for="searchByCategory") Search by category
                     select(id="searchByCategory" class="form-control" name="searchByCategory")
+                        option(value='none' selected='selected') -- none --
                         each category in categories
                             option(value="#{category}") #{category}
             .col-md-4

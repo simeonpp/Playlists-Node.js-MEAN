@@ -155,15 +155,12 @@ module.exports = {
         }
     },
     getList: function (username, sortBy, searchByCat, callback) {
-        // Default sorting
-        sortBy = {"createdOn": -1};
-
         if (sortBy == 'date') {
             sortBy = {"createdOn": -1};
-        }
-
-        if (sortBy == 'rating') {
+        } else if (sortBy == 'rating') {
             sortBy = {"rating": -1};
+        } else {
+            sortBy = {"createdOn": -1}; // Default value
         }
 
         Playlist

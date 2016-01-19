@@ -167,7 +167,7 @@ module.exports = function (appParams) {
     function getList(req, res) {
         var categories = require('../common/constants.js').playlistCategories,
             username = false,
-            sortBy = {},
+            sortBy = 'date',
             searchByCat = false;
 
         if (req.query && req.query.sortBy) {
@@ -191,7 +191,8 @@ module.exports = function (appParams) {
 
             res.render(CONTROLLER_NAME + '/list', {
                 playlists: playlists,
-                categories: categories
+                categories: categories,
+                sortBy: sortBy
             });
         });
     }
