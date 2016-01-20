@@ -1,11 +1,13 @@
-var passport = require('passport');
+var passport = require('passport'),
+    URI = require('urijs');
 
 var CONTROLLER_NAME = 'playlists';
 
 module.exports = function (appParams) {
     var playlistService = require(appParams.servicesPath + '/playlist-service.js'),
         userService = require(appParams.servicesPath + '/user-service.js'),
-        logger = require(appParams.loggerPath)(appParams);
+        logger = require(appParams.loggerPath)(appParams),
+        playlistsPerPage = appParams.playlistsPerPage;
 
     function getCreate(req, res) {
         var categories = require('../common/constants.js').playlistCategories;
@@ -168,7 +170,8 @@ module.exports = function (appParams) {
         var categories = require('../common/constants.js').playlistCategories,
             username = false,
             sortBy = 'date',
-            searchByCategory = false;
+            searchByCategory = false,
+            currentPage = 1;
 
         categories = categories.map(function (category) {
              var currentCategoryName = category,
@@ -197,24 +200,56 @@ module.exports = function (appParams) {
             }
         }
 
+        if (req.query && req.query.page) {
+            currentPage = req.query.page
+        }
+
         if (req.user) {
             username = req.user.username;
         }
 
-        playlistService.getList(username, sortBy, searchByCategory, function (err, playlists) {
+        playlistService.getList(username, sortBy, searchByCategory, currentPage, appParams.playlistsPerPage, function (err, playlists, numberOfPlaylists) {
             if (err) {
                 logger.error(err);
                 res.redirect('/error');
                 return;
             }
 
+            var pagination = generatePagination(req.originalUrl, numberOfPlaylists);
+
             res.render(CONTROLLER_NAME + '/list', {
                 playlists: playlists,
                 categories: categories,
                 sortBy: sortBy,
-                searchByCategory: searchByCategory
+                searchByCategory: searchByCategory,
+                pagination: pagination
             });
         });
+    }
+
+    function generatePagination(originalUrl, totalPages) {
+        var parsedUrl = new URI(originalUrl),
+            pagination = [],
+            currentPaginationObject,
+            i = 1;
+
+        for(i; i <= Math.ceil(totalPages / appParams.playlistsPerPage); i += 1) {
+            if (parsedUrl.hasQuery("page", true)) {
+                parsedUrl.removeSearch("page");
+            }
+
+            parsedUrl.addQuery("page", i);
+
+            currentPaginationObject = {
+                number: i,
+                isActive: false,
+                url: parsedUrl.toString()
+            };
+
+            pagination.push(currentPaginationObject);
+        }
+
+        return pagination;
     }
 
     function deletePlaylist(req, res) {

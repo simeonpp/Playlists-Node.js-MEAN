@@ -5,24 +5,23 @@ block main-content
         | Playlist
 
     - rating = (sortBy == 'rating') ? 'selected' : null;
-    form(method="get" action='/playlists/list')
-        .row
-            .col-md-2
-                label(for="sortBy") Sort options
-                    select(id="sortBy" class="form-control" name="sortBy")
-                        option(value="date") Date
-                        option(value="rating" selected=rating) Rating
-            .col-md-4
-                label(for="searchByCategory") Search by category
-                    select(id="searchByCategory" class="form-control" name="searchByCategory")
-                        option(value='none' selected='selected') -- none --
-                        each category in categories
-                            option(value="#{category.name}" selected=category.isSelected) #{category.name}
-            .col-md-4
+    .row
+        .col-md-2
+            label(for="sortBy") Sort options
+                select(id="sortBy" class="form-control" name="sortBy")
+                    option(value="date") Date
+                    option(value="rating" selected=rating) Rating
+        .col-md-4
+            label(for="searchByCategory") Search by category
+                select(id="searchByCategory" class="form-control" name="searchByCategory")
+                    option(value='none' selected='selected') -- none --
+                    each category in categories
+                        option(value="#{category.name}" selected=category.isSelected) #{category.name}
+        .col-md-6
+            form(method="get" action='/playlists/list')
                 label(for="titleAndDesc") Search by title and description
                 input(id="titleAndDesc" class="form-control" type="titleAndDesc" name="titleAndDesc" placeholder="Title description")
-        .row
-            input(type="submit" class="btn btn-lg" value="Filter")
+                input(type="submit" class="btn btn-lg" value="Filter")
 
     br
     table.table.table-responsive
@@ -44,6 +43,13 @@ block main-content
                     td #{playlist.rating}
                     td
                         a(href='/playlists/#{playlist._id}') View details
+
+    br
+    ul
+        each page in pagination
+            li
+                a(href=page.url)
+                    #{page.number}
 
 block page-scripts
     script(src="/js/src/playlist-list.js")

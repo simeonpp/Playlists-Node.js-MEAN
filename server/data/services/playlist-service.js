@@ -154,7 +154,7 @@ module.exports = {
                 })
         }
     },
-    getList: function (username, sortBy, searchByCat, callback) {
+    getList: function (username, sortBy, searchByCat, page, limit, callback) {
         if (sortBy == 'date') {
             sortBy = {"createdOn": -1};
         } else if (sortBy == 'rating') {
@@ -176,13 +176,30 @@ module.exports = {
                 { privateUserViewers: username }
             ])
             .sort(sortBy)
+            .skip((page - 1) * limit)
+            .limit(limit)
             .exec(function (err, dbPlaylists) {
                 if (err) {
                     callback(err);
                     return;
                 }
 
-                callback(null, dbPlaylists);
+                Playlist
+                    .find(find)
+                        .or([
+                            { $and: [{isPrivate: true}, {creator: username}] },
+                            { isPrivate: false },
+                            { privateUserViewers: username }
+                        ])
+                    .count()
+                    .exec(function (err, numberOfPlaylist) {
+                        if (err) {
+                            callback(err);
+                            return;
+                        }
+
+                        callback(null, dbPlaylists, numberOfPlaylist);
+                    });
             });
     },
     delete: function (playlistId, callback) {

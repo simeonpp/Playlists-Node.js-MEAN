@@ -16,6 +16,7 @@ module.exports = function (config) {
         showDebugMessages: config.showDebugMessages,
         constantsPath: path.normalize(config.rootPath + '/server/common/constants.js'),
 
-        siteTitle: 'Youtube Playlist System'
+        siteTitle: 'Youtube Playlist System',
+        playlistsPerPage: 2
     }
 };
