@@ -1,5 +1,6 @@
 $( document ).ready(function() {
-    var $sortBy = $('#sortBy');
+    var $sortBy = $('#sortBy'),
+        $searchByCategory = $('#searchByCategory');
 
     $sortBy.on('change', function () {
         var $this = $(this),
@@ -13,6 +14,24 @@ $( document ).ready(function() {
         }
 
         parsedUrl.addQuery("sortBy", val);
+        window.location.href = parsedUrl.toString();
+    });
+
+    $searchByCategory.on('change', function () {
+        var $this = $(this),
+            selectedCategory = $this.val();
+
+        var currentUrl = window.location.href,
+            parsedUrl = new URI(currentUrl);
+
+        if (parsedUrl.hasQuery("searchByCategory", true)) {
+            parsedUrl.removeSearch("searchByCategory");
+        }
+
+        if (selectedCategory != 'none') {
+            parsedUrl.addQuery("searchByCategory", selectedCategory);
+        }
+
         window.location.href = parsedUrl.toString();
     });
 

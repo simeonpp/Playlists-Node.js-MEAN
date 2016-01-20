@@ -163,8 +163,13 @@ module.exports = {
             sortBy = {"createdOn": -1}; // Default value
         }
 
+        var find = {};
+        if (searchByCat) {
+            find = { "category": searchByCat };
+        }
+
         Playlist
-            .find()
+            .find(find)
             .or([
                 { $and: [{isPrivate: true}, {creator: username}] },
                 { isPrivate: false },

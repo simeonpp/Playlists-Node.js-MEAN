@@ -168,21 +168,40 @@ module.exports = function (appParams) {
         var categories = require('../common/constants.js').playlistCategories,
             username = false,
             sortBy = 'date',
-            searchByCat = false;
+            searchByCategory = false;
+
+        categories = categories.map(function (category) {
+             var currentCategoryName = category,
+                 categoryObject = {};
+
+            categoryObject.isSelected = null;
+            categoryObject.name = currentCategoryName;
+            return categoryObject;
+        });
 
         if (req.query && req.query.sortBy) {
             sortBy = req.query.sortBy;
         }
 
-        //if (req.query && req.query.searchByCategory) {
-        //    searchByCat = req.query.searchByCategory;
-        //}
+        if (req.query && req.query.searchByCategory) {
+            searchByCategory = req.query.searchByCategory;
+
+            var i = 0,
+                length = categories.length,
+                currentCategory;
+            for(i; i < length; i += 1) {
+                currentCategory = categories[i];
+                if (currentCategory.name == req.query.searchByCategory) {
+                    currentCategory.isSelected = 'selected';
+                }
+            }
+        }
 
         if (req.user) {
             username = req.user.username;
         }
 
-        playlistService.getList(username, sortBy, searchByCat, function (err, playlists) {
+        playlistService.getList(username, sortBy, searchByCategory, function (err, playlists) {
             if (err) {
                 logger.error(err);
                 res.redirect('/error');
@@ -192,7 +211,8 @@ module.exports = function (appParams) {
             res.render(CONTROLLER_NAME + '/list', {
                 playlists: playlists,
                 categories: categories,
-                sortBy: sortBy
+                sortBy: sortBy,
+                searchByCategory: searchByCategory
             });
         });
     }

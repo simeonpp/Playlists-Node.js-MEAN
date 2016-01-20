@@ -17,7 +17,7 @@ block main-content
                     select(id="searchByCategory" class="form-control" name="searchByCategory")
                         option(value='none' selected='selected') -- none --
                         each category in categories
-                            option(value="#{category}") #{category}
+                            option(value="#{category.name}" selected=category.isSelected) #{category.name}
             .col-md-4
                 label(for="titleAndDesc") Search by title and description
                 input(id="titleAndDesc" class="form-control" type="titleAndDesc" name="titleAndDesc" placeholder="Title description")
